@@ -1,14 +1,30 @@
+"use client"
 import Link from "next/link";
+import { signIn, signOut, useSession, getProviders } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const isUserLoggedIn = false;
+
+  const {data:session} = useSession();
+  const [provider,setProvider] = useState(null)
+  const [toggleDropdown] = useState()
+
+
+  useEffect(()=>{
+    const setUpProviders = async () =>{
+      const response =await getProviders()
+      // setProvider(response)
+    }
+
+  },[])
+  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-white to-gray-100 p-6">
       <nav className="w-full flex justify-between items-center p-4  fixed top-0 bg-white shadow-md">
         <h1 className="text-xl font-bold flex items-center">
           <span className="text-brandOrange">Promptopia</span>
         </h1>
-        {!isUserLoggedIn ? (
+        {!session?.user ? (
           <Link href="/" className="bg-black text-white px-4 py-2 rounded-lg">
             Sign in
           </Link>
@@ -16,7 +32,7 @@ export default function HomePage() {
           <></>
         )}
 
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <Link
             href="/create-post"
             className="bg-black text-white px-4 py-2 rounded-lg"
